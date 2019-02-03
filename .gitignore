@@ -1,2 +1,8 @@
 *.pro.user
 *.pro.user.*
+*.gz
+
+src/Eigen/
+src/protobuf/
+src/zlib/
+
