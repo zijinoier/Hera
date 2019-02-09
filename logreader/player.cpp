@@ -1,5 +1,4 @@
 #include "player.h"
-#include "timer.h"
 #include <iostream>
 #include <QFileInfo>
 #include <QtDebug>
@@ -106,7 +105,7 @@ void Player::sendMessage(const Frame* packet) {
 
 void Player::run() {
     sendMessage(packets.at(m_currentFrame));
-    qDebug() << packets.size();
+//    qDebug() << packets.size();
 
     while (m_mayRun && ++m_currentFrame < packets.size() && this->isRunning()) {
         Frame* packet = packets.at(m_currentFrame);
@@ -114,7 +113,7 @@ void Player::run() {
         sendMessage(packet);
 
         qDebug() << m_currentFrame;
-            qDebug() << this->isRunning();
+//            qDebug() << this->isRunning();
     }
 
     emit finished();

@@ -69,9 +69,11 @@ void VisionModule::parse(void * ptr, int size) {
             }
         }
         camera[message.camID].push(message);
+        qDebug() << message.camID;
         cameraUpdate[message.camID] = true;
     }
     if (collectNewVision()) {
+        qDebug() << "im true!";
         std::fill_n(cameraUpdate, PARAM::CAMERA, false);
         dealWithData();
 //        emit needDraw();

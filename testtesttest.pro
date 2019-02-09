@@ -50,7 +50,6 @@ SOURCES += main.cpp \
     logreader/log_slider.cpp \
     logreader/player.cpp \
     logreader/qtiocompressor.cpp \
-    logreader/timer.cpp \
     logwriter/logwriter.cpp \
     netsend/netsend.cpp \
     src/geometry.cpp \
@@ -98,7 +97,6 @@ HEADERS += \
     logreader/message_type.h \
     logreader/player.h \
     logreader/qtiocompressor.h \
-    logreader/timer.h \
     logwriter/logwriter.h \
     netsend/netsend.h \
     src/dataqueue.hpp \
