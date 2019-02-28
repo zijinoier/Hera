@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
         qDebug() << "The output device is logwriter. The out file name is" << parser.value(outFileName);
         vm.flag = 0;
         vm.lw_v.setFileName(parser.value(outFileName));
+        vm.lw_rfb.setFileName(parser.value(outFileName).append("rfb"));
     } else if (parser.value(outputOption) == "ns") {
         qDebug() << "The output device is netsend.";
         vm.flag = 1;
@@ -67,7 +68,10 @@ int main(int argc, char *argv[])
             } else if (packet->type == MESSAGE_SSL_VISION_2010 || packet->type == MESSAGE_SSL_VISION_2014) {
                 vm.parse((void *)packet->data.data(), packet->data.size());
             } else if (packet->type == MESSAGE_SSL_REFBOX_2013) {
-                //refereebox
+                QByteArray buffer;
+                buffer.append(packet->time);
+                buffer.append(packet->data.data());
+                vm.lw_rfb.write(buffer);
             } else {
                 std::cout << "Error unsupported message type found in log file!" << std::endl;
             }
