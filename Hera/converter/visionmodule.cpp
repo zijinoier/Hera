@@ -152,7 +152,7 @@ void VisionModule::toProtobuf(){
 
     //在这儿发送protubuf包
     if (flag == 0) {
-        lw.write(buffer);
+        lw_v.write(buffer);
     } else if (flag == 1) {
         ns.udpSend(buffer);
     }

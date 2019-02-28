@@ -43,17 +43,17 @@ int main(int argc, char *argv[])
     VisionModule vm;
 
     if (parser.value(outputOption) == "lw") {
-        qDebug() << "The output device is logwriter. The filename is" << parser.value(outFileName);
+        qDebug() << "The output device is logwriter. The out file name is" << parser.value(outFileName);
         vm.flag = 0;
-        vm.lw.setFileName(parser.value(outFileName));
+        vm.lw_v.setFileName(parser.value(outFileName));
     } else if (parser.value(outputOption) == "ns") {
-        qDebug() << "The output device is netsend";
+        qDebug() << "The output device is netsend.";
         vm.flag = 1;
     } else {
         qDebug() << "Unknown command";
     }
     if (parser.value(inputOption) == "lr") {
-        qDebug() << "The input device is logreader";
+        qDebug() << "The input device is logreader. The log file name is" << parser.value(logFileName);
         LogSlider ls;
         ls.loadFile(parser.value(logFileName));
         int m_currentFrame = 0;
@@ -67,14 +67,14 @@ int main(int argc, char *argv[])
             } else if (packet->type == MESSAGE_SSL_VISION_2010 || packet->type == MESSAGE_SSL_VISION_2014) {
                 vm.parse((void *)packet->data.data(), packet->data.size());
             } else if (packet->type == MESSAGE_SSL_REFBOX_2013) {
-                //这个不经过convert发给后面
+                //refereebox
             } else {
                 std::cout << "Error unsupported message type found in log file!" << std::endl;
             }
-            std::cout << m_currentFrame << "/" << size << "\r";
+            std::cout << m_currentFrame + 1 << "/" << size << "\r";
         }
     } else if (parser.value(inputOption) == "nr") {
-        qDebug() << "The input device is netreceive";
+        qDebug() << "The input device is netreceive.";
         NetReceive nr;
         while (true) {
             nr.storeData();
@@ -90,9 +90,9 @@ int main(int argc, char *argv[])
         qDebug() << "Unknown command";
     }
 
-    a.exit(0);
+//    return a.exec();
 
-    return a.exec();
+    a.exit(0);
 }
 
 

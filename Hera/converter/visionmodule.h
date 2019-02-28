@@ -28,7 +28,8 @@ class VisionModule : public QObject {
     QString filename;
     int flag = 0;
 
-    LogWriter lw;
+    LogWriter lw_v;
+    LogWriter lw_rfb;
     NetSend ns;
 
     //暂时先作为public处理
