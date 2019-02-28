@@ -1,24 +1,20 @@
 #ifndef LOG_SLIDER_H
 #define LOG_SLIDER_H
 
+#include "logreader_global.h"
 #include <QString>
+#include <QObject>
 #include <iostream>
 #include <string>
 #include "player.h"
 
-class LogSlider {
-
+class LOGREADERSHARED_EXPORT LogSlider : QObject
+{
+    Q_OBJECT
   public:
     LogSlider();
-    void loadFile(QString filename);
-
-  private:
+    bool loadFile(QString filename);
     Player m_player;
-    int m_currentFrame;
-    bool m_stopped;
-
-  private slots:
-    void updateTime(int frame, double time);
 };
 
 #endif // LOG_SLIDER_H

@@ -28,13 +28,6 @@ LogFile::~LogFile()
 
 bool LogFile::addFormat(FileFormat* format)
 {
-//    if (m_formatMap.contains(format->version())) {
-//        std::cout << "Error adding log format!" << std::endl;
-//        std::cout << "Format version " << format->version() << " has been used twice." << std::endl;
-
-//        return false;
-//    }
-
     m_formatMap[format->version()] = format;
 
     return true;
@@ -59,7 +52,6 @@ bool LogFile::openRead() {
 
         QDataStream stream(m_io);
         if (format->readHeaderFromStream(stream)) {
-//            std::cout << "Detected log file format version " << format->version() << "." << std::endl;
             m_formatVersion = format->version();
             return true;
         }
@@ -79,8 +71,6 @@ bool LogFile::readMessage(QByteArray& data, qint64& time, MessageType& type)
     FileFormat* format = m_formatMap.value(m_formatVersion, NULL);
 
     if (format == NULL) {
-//        std::cout << "Error log file format is not supported!" << std::endl;
-
         return false;
     }
 

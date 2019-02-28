@@ -2,9 +2,11 @@
 #define NETSEND_H
 
 #include <QUdpSocket>
+#include "netsend_global.h"
 
-class NetSend
+class NETSENDSHARED_EXPORT NetSend
 {
+
 public:
     NetSend();
     void udpSend(QByteArray buffer);

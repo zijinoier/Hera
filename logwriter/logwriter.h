@@ -2,32 +2,18 @@
 #define LOGWRITER_H
 
 #include <QFile>
-#include <QDataStream>
+#include "logwriter_global.h"
 
-//class LogWriter
-//{
-//public:
-//    LogWriter(QString& filename);
-//    ~LogWriter();
-
-//    void write(QByteArray buffer);
-
-//private:
-//    QFile* outfile;
-//    QIODevice* outdata;
-//    QString filename;
-//};
-
-class LogWriter
+class LOGWRITERSHARED_EXPORT LogWriter
 {
 public:
-    LogWriter(QString &filename);
+    LogWriter();
     ~LogWriter();
 
     void write(QByteArray buffer);
+    void setFileName(QString &filename);
 private:
     QFile* outfile;
-
 };
 
 #endif // LOGWRITER_H
