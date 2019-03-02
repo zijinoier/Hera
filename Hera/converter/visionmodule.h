@@ -27,6 +27,7 @@ class VisionModule : public QObject {
 
     QString filename;
     int flag = 0;
+    int vision_port;
 
     LogWriter lw_v;
     LogWriter lw_rfb;
@@ -46,11 +47,6 @@ class VisionModule : public QObject {
     double lastPossible, currentPossible;
 
   private:
-    QUdpSocket udpReceiveSocket, udpSendSocket;
-    QHostAddress groupAddress;
-    int interface;
-    int vision_port, zeus_port;
-    int saoAction;
     bool collectNewVision();
     bool dealWithData();
     CGlobalSettings globalsetting;

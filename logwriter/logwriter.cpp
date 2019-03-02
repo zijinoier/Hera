@@ -16,6 +16,6 @@ void LogWriter::setFileName(QString &filename) {
     outfile->open(QIODevice::WriteOnly);
 }
 
-void LogWriter::write(QByteArray buffer) {
-    outfile->write(buffer);
+qint64 LogWriter::write(QByteArray buffer) {
+    return outfile->write(buffer);
 }

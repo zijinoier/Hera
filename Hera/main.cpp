@@ -7,6 +7,7 @@
 #include "netreceive.h"
 #include "netreceive_global.h"
 #include "Windows.h"
+#include "staticparams.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,7 +17,9 @@ int main(int argc, char *argv[])
     QCommandLineOption logFileName("if", "", "logfilename", "");
     QCommandLineOption outputOption(QStringList() << "o" << "O", "", "outputoption", "lw");
     QCommandLineOption outFileName("of", "", "outfilename", "test.zlog");
+
     QCommandLineOption cameraNumber("cn", "", "cameranumber", "8");
+    QCommandLineOption visionPort("p", "", "visionport", "10020");
 
     QCommandLineParser parser;
     parser.addOption(inputOption);
@@ -24,6 +27,8 @@ int main(int argc, char *argv[])
     parser.addOption(outputOption);
     parser.addOption(outFileName);
     parser.addOption(cameraNumber);
+    parser.addOption(visionPort);
+
     parser.process(a);
 
 //    qDebug() << parser.value(inputOption);
@@ -41,6 +46,8 @@ int main(int argc, char *argv[])
     }
 
     VisionModule vm;
+    qDebug() << "Vision port is" << parser.value(visionPort).toInt();
+    vm.vision_port = parser.value(visionPort).toInt();
 
     if (parser.value(outputOption) == "lw") {
         qDebug() << "The output device is logwriter. The out file name is" << parser.value(outFileName);
@@ -51,7 +58,7 @@ int main(int argc, char *argv[])
         qDebug() << "The output device is netsend.";
         vm.flag = 1;
     } else {
-        qDebug() << "Unknown command";
+        qDebug() << "Unknown command. You can get more imformation from README.md";
     }
     if (parser.value(inputOption) == "lr") {
         qDebug() << "The input device is logreader. The log file name is" << parser.value(logFileName);
@@ -68,12 +75,17 @@ int main(int argc, char *argv[])
             } else if (packet->type == MESSAGE_SSL_VISION_2010 || packet->type == MESSAGE_SSL_VISION_2014) {
                 vm.parse((void *)packet->data.data(), packet->data.size());
             } else if (packet->type == MESSAGE_SSL_REFBOX_2013) {
-                QByteArray buffer;
-                buffer.append(packet->time);
-                buffer.append(packet->data.data());
-                vm.lw_rfb.write(buffer);
+                if (parser.value(outputOption) != "ns") {
+                    QByteArray buffer;
+                    buffer.append(packet->time);
+                    buffer.append(packet->data.data());
+                    vm.lw_rfb.write(buffer);
+                }
             } else {
                 std::cout << "Error unsupported message type found in log file!" << std::endl;
+            }
+            if (parser.value(outputOption) == "ns") {
+                Sleep(1000/60);
             }
             std::cout << m_currentFrame + 1 << "/" << size << "\r";
         }
@@ -87,11 +99,13 @@ int main(int argc, char *argv[])
 //                qDebug() << "Ah! There is something catched by me.";
                 QByteArray datagram = nr.datagrams.dequeue();
                 vm.parse((void*)datagram.data(), datagram.size());
+                std::cout << "Some data was gotten from UDP." << std::endl;
             }
             Sleep(5);
+            std::cout << "Nothing from UDP" << "\r";
         }
     } else {
-        qDebug() << "Unknown command";
+        qDebug() << "Unknown command. You can get more imformation from README.md";
     }
 
 //    return a.exec();

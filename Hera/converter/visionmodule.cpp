@@ -14,8 +14,6 @@
  */
 VisionModule::VisionModule(QObject *parent)
     : QObject(parent)
-    , udpReceiveSocket()
-    , udpSendSocket()
     , dealBall(this)
     , dealRobot(this)
     , cmaintain(this)
@@ -153,6 +151,7 @@ void VisionModule::toProtobuf(){
     //在这儿发送protubuf包
     if (flag == 0) {
         lw_v.write(buffer);
+
     } else if (flag == 1) {
         ns.udpSend(buffer);
     }
