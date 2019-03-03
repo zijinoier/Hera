@@ -12,6 +12,9 @@ LogWriter::~LogWriter() {
 }
 
 void LogWriter::setFileName(QString &filename) {
+    delete outfile;
+    outfile = NULL;
+
     outfile = new QFile(filename);
     outfile->open(QIODevice::WriteOnly);
 }
