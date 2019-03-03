@@ -1,9 +1,7 @@
 ﻿#include "maintain.h"
-#include "globaldata.h"
 #include "staticparams.h"
 #include "collisiondetect.h"
 #include "visionmodule.h"
-//#include "field.h"
 #include "dealball.h"
 
 CMaintain::CMaintain(VisionModule* vm)

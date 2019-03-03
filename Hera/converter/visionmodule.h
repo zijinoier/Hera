@@ -9,7 +9,6 @@
 #include "vision_detection.pb.h"
 #include "staticparams.h"
 #include "messageformat.h"
-#include "globaldata.h"
 #include "globalsettings.h"
 #include "dealball.h"
 #include "dealrobot.h"
@@ -18,6 +17,13 @@
 #include "logwriter_global.h"
 #include "netsend.h"
 #include "netsend_global.h"
+
+enum ballState {received,
+                touched,
+                kicked,
+                struggle,
+                chip_pass,
+                flat_pass};
 
 class VisionModule : public QObject {
     Q_OBJECT
@@ -41,8 +47,7 @@ class VisionModule : public QObject {
     DataQueue<BallRecord> ballrecords;
     SingleCamera cameraMatrix[PARAM::CAMERA];
     ballState ballStateMachine;
-    bool cameraUpdate[PARAM::CAMERA];
-    bool cameraControl[PARAM::CAMERA];
+    bool cameraUpdate[PARAM::CAMERA] = {false, false, true, true, true, true, true, true};
     int lastTouch;
     double lastPossible, currentPossible;
 

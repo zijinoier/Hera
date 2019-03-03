@@ -24,13 +24,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         netsend.cpp \
-    vision_detection.pb.cc
+    ../Hera/share/proto/cpp/vision_detection.pb.cc
 
 HEADERS += \
         netsend.h \
         netsend_global.h \ 
-    staticparams.h \
-    vision_detection.pb.h
+    ../Hera/share/staticparams.h \
+    ../Hera/share/proto/cpp/vision_detection.pb.h
 
 PROTOBUF_INCLUDE_DIR = $$PWD/../3rdParty/protobuf/include
 PROTOBUF_LIB = $$PWD/../3rdParty/protobuf/lib/x64/libprotobuf.lib

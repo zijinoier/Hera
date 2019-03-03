@@ -1,7 +1,7 @@
 #include <QDebug>
 #include "netsend.h"
-#include "vision_detection.pb.h"
-#include "staticparams.h"
+#include "../Hera/share/proto/cpp/vision_detection.pb.h"
+#include "../Hera/share/staticparams.h"
 
 NetSend::NetSend()
     : udpSendSocket() {

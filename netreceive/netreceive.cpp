@@ -1,4 +1,4 @@
-#include "staticparams.h"
+#include "../Hera/share/staticparams.h"
 #include "netreceive.h"
 #include "Windows.h"
 

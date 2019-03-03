@@ -1,8 +1,6 @@
 #ifndef DEALBALL_H
 #define DEALBALL_H
 
-#include <singleton.hpp>
-#include "globaldata.h"
 #include "messageformat.h"
 #include "geometry.h"
 #include "kalmanfilter.h"
@@ -37,12 +35,6 @@ class CDealBall {
     long long _cycle, lastFrame, currentFrame;
 
     VisionModule* vm;
-
-//    DataQueue<ReceiveVisionMessage> processBall;
-//    DataQueue<ReceiveVisionMessage> maintain;
-//    DataQueue<ReceiveVisionMessage> camera[PARAM::CAMERA];
-//    SingleCamera cameraMatrix[PARAM::CAMERA];
-//    ballState ballStateMachine;
 };
 
 #endif // DEALBALL_H

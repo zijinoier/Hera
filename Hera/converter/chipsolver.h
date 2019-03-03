@@ -1,6 +1,6 @@
 #ifndef CHIPSOLVER_H
 #define CHIPSOLVER_H
-#include "globaldata.h"
+
 #include "ballrecords.h"
 
 class VisionModule;
@@ -25,9 +25,6 @@ private:
     double t;
     double tFly;
     BallRecord ballrecord;
-
-//    DataQueue<BallRecord> ballrecords;
-//    DataQueue<ReceiveVisionMessage> maintain;
 
     VisionModule* vm;
 

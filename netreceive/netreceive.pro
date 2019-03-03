@@ -28,6 +28,6 @@ SOURCES += \
 HEADERS += \
         netreceive.h \
         netreceive_global.h \ 
-    staticparams.h
+    ../Hera/share/staticparams.h
 
 DESTDIR = $$PWD/../bin

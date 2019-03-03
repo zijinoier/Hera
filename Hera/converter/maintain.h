@@ -4,7 +4,6 @@
 #include "vision_detection.pb.h"
 #include "kalmanfilter.h"
 #include "chipsolver.h"
-#include "globaldata.h"
 #include "collisiondetect.h"
 #include "messageformat.h"
 #include <QUdpSocket>

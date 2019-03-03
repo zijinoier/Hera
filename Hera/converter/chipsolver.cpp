@@ -1,5 +1,4 @@
 ﻿#include "chipsolver.h"
-#include "globaldata.h"
 #include "ballrecords.h"
 #include "visionmodule.h"
 #include "Eigen/Dense"

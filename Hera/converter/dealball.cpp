@@ -1,5 +1,4 @@
 ﻿#include "dealball.h"
-#include "globaldata.h"
 #include "staticparams.h"
 #include "parammanager.h"
 #include "matrix2d.h"

@@ -1,7 +1,6 @@
 #ifndef COLLISIONDETECT_H
 #define COLLISIONDETECT_H
 #include "singleton.hpp"
-#include "globaldata.h"
 #include "geometry.h"
 
 #define DETECT_DIST 300 //detect whether the ball in 300mm of vechile
@@ -28,11 +27,6 @@ private:
     int _RecordFlag = 0;
     int _RecordIndex = -1;
     int PointN;
-    //int LastTouch=0;//0 for struggle; 1 for our ;2 for their; 3 for wall;
-
-//    DataQueue<ReceiveVisionMessage> maintain;
-//    ballState ballStateMachine;
-//    int lastTouch;
 
     VisionModule* vm;
 };

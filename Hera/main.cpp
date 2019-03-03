@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     QCommandLineOption outputOption(QStringList() << "o" << "O", "", "outputoption", "lw");
     QCommandLineOption outFileName("of", "", "outfilename", "test.zlog");
 
-    QCommandLineOption cameraNumber("cn", "", "cameranumber", "8");
+//    QCommandLineOption cameraNumber("cn", "", "cameranumber", "8");
     QCommandLineOption visionPort("p", "", "visionport", "10020");
 
     QCommandLineParser parser;
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     parser.addOption(logFileName);
     parser.addOption(outputOption);
     parser.addOption(outFileName);
-    parser.addOption(cameraNumber);
+//    parser.addOption(cameraNumber);
     parser.addOption(visionPort);
 
     parser.process(a);
@@ -37,13 +37,13 @@ int main(int argc, char *argv[])
 //    qDebug() << parser.value(outFileName);
 //    qDebug() << parser.value(cameraNumber);
 
-    if (parser.value(cameraNumber) == "4") {
-        qDebug() << "Camera number now is 4";
-    } else if (parser.value(cameraNumber) == "8") {
-        qDebug() << "Camera number now is 8";
-    } else {
-        qDebug() << "Unavailable camera number";
-    }
+//    if (parser.value(cameraNumber) == "4") {
+//        qDebug() << "Camera number now is 4";
+//    } else if (parser.value(cameraNumber) == "8") {
+//        qDebug() << "Camera number now is 8";
+//    } else {
+//        qDebug() << "Unavailable camera number";
+//    }
 
     VisionModule vm;
     qDebug() << "Vision port is" << parser.value(visionPort).toInt();
@@ -92,11 +92,10 @@ int main(int argc, char *argv[])
     } else if (parser.value(inputOption) == "nr") {
         qDebug() << "The input device is netreceive.";
         NetReceive nr;
+        //UDP can't work with dll, so force cycle SLOT function.
         while (true) {
             nr.storeData();
-//            qDebug() << "main" <<nr.datagrams.isEmpty();
             while (!nr.datagrams.isEmpty()) {
-//                qDebug() << "Ah! There is something catched by me.";
                 QByteArray datagram = nr.datagrams.dequeue();
                 vm.parse((void*)datagram.data(), datagram.size());
                 std::cout << "Some data was gotten from UDP." << std::endl;

@@ -19,8 +19,6 @@ VisionModule::VisionModule(QObject *parent)
     , cmaintain(this)
     , lastTouch(0)
 {
-    std::fill_n(cameraUpdate, PARAM::CAMERA, false);
-    std::fill_n(cameraControl, PARAM::CAMERA, true);
     detectionBall = detectionFrame.mutable_balls();
     setCameraMatrix();
 }
@@ -65,11 +63,12 @@ void VisionModule::parse(void * ptr, int size) {
         }
         camera[message.camID].push(message);
         cameraUpdate[message.camID] = true;
+//        qDebug() << message.camID;
     }
     if (collectNewVision()) {
-        std::fill_n(cameraUpdate, PARAM::CAMERA, false);
+//        std::fill_n(cameraUpdate, PARAM::CAMERA, false);
+        std::fill_n(cameraUpdate, PARAM::CAMERA - 4, false);//fix camera 4 for 2017 log
         dealWithData();
-//        emit needDraw();
     }
 }
 
@@ -150,8 +149,7 @@ void VisionModule::toProtobuf(){
 
     //在这儿发送protubuf包
     if (flag == 0) {
-        lw_v.write(buffer);
-
+        qDebug() << lw_v.write(buffer);
     } else if (flag == 1) {
         ns.udpSend(buffer);
     }
