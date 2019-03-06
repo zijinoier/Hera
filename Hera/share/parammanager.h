@@ -22,6 +22,7 @@ public:
     QVariant value(const QString&);
     QVariant value(const QString&,const QString&);
     void sync();
+    void clear();
 protected:
     QSettings *settings;
 };
@@ -45,10 +46,16 @@ public:
     ParamManagerTemp():ParamManager("temp.ini"){}
     ~ParamManagerTemp(){}
 };
+class ParamManagerLogClip:public ParamManager{
+public:
+    ParamManagerLogClip():ParamManager("logclip.ini"){}
+    ~ParamManagerLogClip(){}
+};
 typedef Singleton<ParamManagerZSS> ZParamManager;
 typedef Singleton<ParamManagerKickParam> KParamManager;
 typedef Singleton<ParamManagerVisionParam> VParamManager;
 typedef Singleton<ParamManagerTemp> TParamManager;
+typedef Singleton<ParamManagerLogClip> LParamManager;
 }
 
 #endif // PARAMMANAGER_H

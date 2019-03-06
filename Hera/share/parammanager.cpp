@@ -62,9 +62,10 @@ bool ParamManager::changeParam(const QString & key, const QVariant & value){
     return true;
 }
 bool ParamManager::changeParam(const QString & group,const QString & key,const QVariant & value){
-    settings->setValue(group+'/'+key,value);
     settings->beginGroup(group);
+    settings->setValue(key,value);
     settings->endGroup();
+    settings->sync();
     return true;
 }
 QStringList ParamManager::allKeys(){
@@ -86,6 +87,10 @@ QVariant ParamManager::value(const QString& group,const QString& key){
     return settings->value(group+'/'+key);
 }
 void ParamManager::sync(){
+    settings->sync();
+}
+void ParamManager::clear() {
+    settings->clear();
     settings->sync();
 }
 }
