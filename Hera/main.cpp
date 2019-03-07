@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
                 qDebug() << "Load failed! Please check your DIR or FILENAME.";
                 break;
             }
-            for (int j=0; j<cycle2[i]; j++) {
+            for (int j=0; j<(parser.isSet(logFileClip) ? cycle2[i] : 1); j++) {
                 if (vm.flag == 0) {
                     QString outFileName = m_logfile.at(i);
                     int a = outFileName.lastIndexOf("/");
@@ -127,7 +127,6 @@ int main(int argc, char *argv[])
                     }
                 }
                 int m_currentFrame = parser.isSet(logFileClip) ? startIndex[j] : 0;
-                qDebug() << m_currentFrame;
                 int size = parser.isSet(logFileClip) ? duration[j] + m_currentFrame : ls.m_player.packets.size();
                 while (++m_currentFrame < size) {
                     Frame* packet = ls.m_player.packets.at(m_currentFrame);
@@ -161,7 +160,8 @@ int main(int argc, char *argv[])
         NetReceive nr;
         if (vm.flag == 0) {
             vm.lw_v.setFileName(parser.value(outFileName));
-            vm.lw_rfb.setFileName(parser.value(outFileName).replace(".zlog", "_rfb.zlog"));
+//            vm.lw_rfb.setFileName(parser.value(outFileName).replace(".zlog", "_rfb.zlog"));
+//            不需要裁判盒信息
         }
         //UDP can't work with dll, so force cycle SLOT function.
         while (true) {
@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
                 std::cout << "Some data was gotten from UDP." << "\r";
             }
             Sleep(5);
-            std::cout << "Nothing from UDP" << "\r";
+            std::cout << "Nothing from UDP." << "\r";
         }
     } else {
         qDebug() << "Unknown command. You can get more imformation from README.md";
