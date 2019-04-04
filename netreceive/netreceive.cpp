@@ -2,7 +2,7 @@
 #include "netreceive.h"
 #include "Windows.h"
 
-NetReceive::NetReceive(QObject *parent) : QObject(parent){
+NetReceive::NetReceive(int port, QObject *parent) : QObject(parent), vision_port(port){
     udpSocketConnect();
 }
 

@@ -47,7 +47,6 @@ int main(int argc, char *argv[])
 
     VisionModule vm;
     if(parser.value(inputOption) == "nr") qDebug() << "Vision port is" << parser.value(visionPort).toInt();
-    vm.vision_port = parser.value(visionPort).toInt();
 
     //output
     if (parser.value(outputOption) == "lw") {
@@ -157,7 +156,7 @@ int main(int argc, char *argv[])
         qDebug() << "All tasks finished, please find results in" << parser.value(outFileDir);
     } else if (parser.value(inputOption) == "nr") {
         qDebug() << "The input device is netreceive.";
-        NetReceive nr;
+        NetReceive nr(parser.value(visionPort).toInt());
         if (vm.flag == 0) {
             vm.lw_v.setFileName(parser.value(outFileName));
 //            vm.lw_rfb.setFileName(parser.value(outFileName).replace(".zlog", "_rfb.zlog"));

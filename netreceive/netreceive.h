@@ -10,9 +10,10 @@ class NETRECEIVESHARED_EXPORT NetReceive : public QObject
 {
     Q_OBJECT
 public:
-    NetReceive(QObject *parent = 0);
+    NetReceive(int port,QObject *parent = 0);
     ~NetReceive();
     QQueue<QByteArray> datagrams;
+    int vision_port = 10020;
 
 public slots:
     void storeData();
@@ -23,7 +24,7 @@ private:
     void udpSocketDisconnect();
 
 
-    int vision_port = 10020;
+
 
 //    VisionModule vm;
 };
