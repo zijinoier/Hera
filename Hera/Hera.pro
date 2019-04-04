@@ -45,7 +45,10 @@ SOURCES += main.cpp \
     share/proto/cpp/vision_detection.pb.cc \
     share/proto/cpp/zss_cmd.pb.cc \
     share/proto/cpp/zss_debug.pb.cc \
-    share/proto/cpp/zss_train.pb.cc
+    share/proto/cpp/zss_train.pb.cc \
+    share/proto/cpp/passpackage4RL.pb.cc \
+    converter/ballstate.cpp \
+    converter/statejudge.cpp
 
 INCLUDEPATH += \
     $$PWD/../logreader \
@@ -105,7 +108,10 @@ HEADERS += \
     share/proto/cpp/vision_detection.pb.h \
     share/proto/cpp/zss_cmd.pb.h \
     share/proto/cpp/zss_debug.pb.h \
-    share/proto/cpp/zss_train.pb.h
+    share/proto/cpp/zss_train.pb.h \
+    share/proto/cpp/passpackage4RL.pb.h \
+    converter/ballstate.h \
+    converter/statejudge.h
 
 # Third party library dir
 win32 {

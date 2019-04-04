@@ -2,6 +2,7 @@
 #define CHIPSOLVER_H
 
 #include "ballrecords.h"
+#include "statejudge.h"
 
 class VisionModule;
 class Chipsolver {
@@ -14,6 +15,9 @@ public:
     void reset();
     void setrecord();
     void setrecord_test();
+    void resetConfidence();
+    void addChipConfidence(double value);
+    void deChipConfidence(double value);
 
 private:
     CVector3 kickVel;
@@ -25,6 +29,9 @@ private:
     double t;
     double tFly;
     BallRecord ballrecord;
+    double chipConfidence;
+    double flatConfidence;
+    StateJudge judgeTool;
 
     VisionModule* vm;
 

@@ -17,9 +17,15 @@ VisionModule::VisionModule(QObject *parent)
     , dealBall(this)
     , dealRobot(this)
     , cmaintain(this)
+    , ballState4Log(this)
     , lastTouch(0)
+    , passCount(0)
+    , lastpBallState("other")
+    , needNewFile(true)
 {
-    detectionBall = detectionFrame.mutable_balls();
+    passBegin       = package4RL.mutable_beginframe();
+    passEnd         = package4RL.mutable_endframe();
+//    detectionBall   = detectionFrame.mutable_balls();
     setCameraMatrix();
 }
 
@@ -27,11 +33,21 @@ bool VisionModule::dealWithData() {
     dealBall.run();
     dealRobot.run();
     cmaintain.run();
-    toProtobuf();
-    return true;
+    //根据maintain[-500]塞reward
+
+    if (maintain.validSize()>500) {
+        ballState4Log.run(maintain);
+        if (ballState4Log.ballState == _pass)
+            pBallState = "pass";
+        else pBallState = "other";
+        if (toProtobuf()) return true;
+    } else {
+        return false;
+    }
+    return false;
 }
 
-void VisionModule::parse(void * ptr, int size) {
+bool VisionModule::parse(void * ptr, int size) {
     static SSL_WrapperPacket packet;
     ReceiveVisionMessage message;
     packet.ParseFromArray(ptr, size);
@@ -68,8 +84,9 @@ void VisionModule::parse(void * ptr, int size) {
     if (collectNewVision()) {
 //        std::fill_n(cameraUpdate, PARAM::CAMERA, false);
         std::fill_n(cameraUpdate, PARAM::CAMERA - 4, false);//fix camera 4 for 2017 log
-        dealWithData();
+        if (dealWithData()) return true;
     }
+    return false;
 }
 
 /**
@@ -101,60 +118,138 @@ void VisionModule::setCameraMatrix() {
         }
     }
 
-void VisionModule::toProtobuf(){
-    ReceiveVisionMessage result = maintain[0];
-    if (result.ballSize > 0) {
-        detectionBall->set_x(result.ball[0].pos.x());
-        if (result.ball[0].pos.y() == 0) detectionBall->set_y(float(0.1));
-        else detectionBall->set_y(result.ball[0].pos.y());//to fix a role match bug 2018.6.15
-        CVector TransferVel(result.ball[0].velocity.x(), result.ball[0].velocity.y());
-        detectionBall->set_vel_x(TransferVel.x());
-        detectionBall->set_vel_y(TransferVel.y());
-        detectionBall->set_valid(dealBall.getValid());
-        detectionBall->set_last_touch(lastTouch);
-        detectionBall->set_ball_state(ballStateMachine);
-    } else {
-        detectionBall->set_x(-32767);
-        detectionBall->set_y(-32767);
-    }
-    for (int i = 0; i < result.robotSize[PARAM::BLUE]; i++) {
-        if (i == PARAM::SENDROBOTNUM) break; //for sending MAX 8 car possible
-        detectionRobot[PARAM::BLUE][i] = detectionFrame.add_robots_blue();
-        detectionRobot[PARAM::BLUE][i]->set_x(result.robot[PARAM::BLUE][i].pos.x());
-        detectionRobot[PARAM::BLUE][i]->set_y(result.robot[PARAM::BLUE][i].pos.y());
-        detectionRobot[PARAM::BLUE][i]->set_orientation(result.robot[PARAM::BLUE][i].angle);
-        detectionRobot[PARAM::BLUE][i]->set_robot_id(result.robot[PARAM::BLUE][i].id);
-        detectionRobot[PARAM::BLUE][i]->set_confidence(1);
-        CVector TransferVel(result.robot[PARAM::BLUE][i].velocity.x(), result.robot[PARAM::BLUE][i].velocity.y());
-        detectionRobot[PARAM::BLUE][i]->set_vel_x(TransferVel.x());
-        detectionRobot[PARAM::BLUE][i]->set_vel_y(TransferVel.y());
-        detectionRobot[PARAM::BLUE][i]->set_rotate_vel(result.robot[PARAM::BLUE][i].rotateVel);
-    }
-    for (int i = 0; i < result.robotSize[PARAM::YELLOW]; i++) {
-        if (i == PARAM::SENDROBOTNUM) break;
-        detectionRobot[PARAM::YELLOW][i] = detectionFrame.add_robots_yellow();
-        detectionRobot[PARAM::YELLOW][i]->set_x(result.robot[PARAM::YELLOW][i].pos.x());
-        detectionRobot[PARAM::YELLOW][i]->set_y(result.robot[PARAM::YELLOW][i].pos.y());
-        detectionRobot[PARAM::YELLOW][i]->set_orientation(result.robot[PARAM::YELLOW][i].angle);
-        detectionRobot[PARAM::YELLOW][i]->set_robot_id(result.robot[PARAM::YELLOW][i].id);
-        detectionRobot[PARAM::YELLOW][i]->set_confidence(1);
-        CVector TransferVel(result.robot[PARAM::YELLOW][i].velocity.x(), result.robot[PARAM::YELLOW][i].velocity.y());
-        detectionRobot[PARAM::YELLOW][i]->set_vel_x(TransferVel.x());
-        detectionRobot[PARAM::YELLOW][i]->set_vel_y(TransferVel.y());
-        detectionRobot[PARAM::YELLOW][i]->set_rotate_vel(result.robot[PARAM::YELLOW][i].rotateVel);
-    }
-    int size = detectionFrame.ByteSize();
-    QByteArray buffer(size, 0);
-    detectionFrame.SerializeToArray(buffer.data(), buffer.size());
+bool VisionModule::toProtobuf(){
+//    qDebug() << needNewFile << "the last state is " <<lastpBallState  <<"and the current state is "<<pBallState;
 
-    //在这儿发送protubuf包
-    if (flag == 0) {
+    if (pBallState == "pass" && needNewFile) {
+        needNewFile = false;
+        passCount++;
+        ReceiveVisionMessage result = maintain[-500];
+        detectionBall = passBegin->mutable_balls();
+        if (result.ballSize > 0) {
+            detectionBall->set_x(result.ball[0].pos.x());
+            if (result.ball[0].pos.y() == 0) detectionBall->set_y(float(0.1));
+            else detectionBall->set_y(result.ball[0].pos.y());//to fix a role match bug 2018.6.15
+            CVector TransferVel(result.ball[0].velocity.x(), result.ball[0].velocity.y());
+            detectionBall->set_vel_x(TransferVel.x());
+            detectionBall->set_vel_y(TransferVel.y());
+            detectionBall->set_valid(dealBall.getValid());
+            detectionBall->set_last_touch(lastTouch);
+            detectionBall->set_ball_state(ballStateMachine);
+        } else {
+            detectionBall->set_x(-32767);
+            detectionBall->set_y(-32767);
+        }
+        for (int i = 0; i < result.robotSize[PARAM::BLUE]; i++) {
+            if (i == PARAM::SENDROBOTNUM) break; //for sending MAX 8 car possible
+            detectionRobot[PARAM::BLUE][i] = passBegin->add_robots_blue();
+//            detectionRobot[PARAM::BLUE][i] = detectionFrame.add_robots_blue();
+            detectionRobot[PARAM::BLUE][i]->set_x(result.robot[PARAM::BLUE][i].pos.x());
+            detectionRobot[PARAM::BLUE][i]->set_y(result.robot[PARAM::BLUE][i].pos.y());
+            detectionRobot[PARAM::BLUE][i]->set_orientation(result.robot[PARAM::BLUE][i].angle);
+            detectionRobot[PARAM::BLUE][i]->set_robot_id(result.robot[PARAM::BLUE][i].id);
+            detectionRobot[PARAM::BLUE][i]->set_confidence(1);
+            CVector TransferVel(result.robot[PARAM::BLUE][i].velocity.x(), result.robot[PARAM::BLUE][i].velocity.y());
+            detectionRobot[PARAM::BLUE][i]->set_vel_x(TransferVel.x());
+            detectionRobot[PARAM::BLUE][i]->set_vel_y(TransferVel.y());
+            detectionRobot[PARAM::BLUE][i]->set_rotate_vel(result.robot[PARAM::BLUE][i].rotateVel);
+        }
+        for (int i = 0; i < result.robotSize[PARAM::YELLOW]; i++) {
+            if (i == PARAM::SENDROBOTNUM) break;
+//            detectionRobot[PARAM::YELLOW][i] = detectionFrame.add_robots_yellow();
+            detectionRobot[PARAM::YELLOW][i] = passBegin->add_robots_yellow();
+            detectionRobot[PARAM::YELLOW][i]->set_x(result.robot[PARAM::YELLOW][i].pos.x());
+            detectionRobot[PARAM::YELLOW][i]->set_y(result.robot[PARAM::YELLOW][i].pos.y());
+            detectionRobot[PARAM::YELLOW][i]->set_orientation(result.robot[PARAM::YELLOW][i].angle);
+            detectionRobot[PARAM::YELLOW][i]->set_robot_id(result.robot[PARAM::YELLOW][i].id);
+            detectionRobot[PARAM::YELLOW][i]->set_confidence(1);
+            CVector TransferVel(result.robot[PARAM::YELLOW][i].velocity.x(), result.robot[PARAM::YELLOW][i].velocity.y());
+            detectionRobot[PARAM::YELLOW][i]->set_vel_x(TransferVel.x());
+            detectionRobot[PARAM::YELLOW][i]->set_vel_y(TransferVel.y());
+            detectionRobot[PARAM::YELLOW][i]->set_rotate_vel(result.robot[PARAM::YELLOW][i].rotateVel);
+        }
+//        int size = detectionFrame.ByteSize();
+        int size = passBegin->ByteSize();
+        QByteArray buffer(size, 0);
+//        detectionFrame.SerializeToArray(buffer.data(), buffer.size());
+        passBegin->SerializeToArray(buffer.data(), buffer.size());
+
+        //在这儿发送protubuf包
+        QString beginbegin = "_end_"+QString::number(passCount - 1)+".zlog";
+//        lw_v.setFileName(filename.replace(beginbegin, "_pass_" + QString::number(passCount) + ".zlog"));
         lw_v.write(buffer);
-    } else if (flag == 1) {
-        ns.udpSend(buffer);
-    }
-    //发送完毕
 
-    detectionFrame.clear_robots_blue();
-    detectionFrame.clear_robots_yellow();
+        //发送完毕
+
+        passBegin->clear_robots_blue();
+        passBegin->clear_robots_yellow();
+        lastpBallState = "pass";
+        return true;
+    } else if (lastpBallState == "pass" && pBallState != "pass") {
+        needNewFile = true;
+        ReceiveVisionMessage result = maintain[-500];
+        detectionBall = passEnd->mutable_balls();
+        if (result.ballSize > 0) {
+            detectionBall->set_x(result.ball[0].pos.x());
+            if (result.ball[0].pos.y() == 0) detectionBall->set_y(float(0.1));
+            else detectionBall->set_y(result.ball[0].pos.y());//to fix a role match bug 2018.6.15
+            CVector TransferVel(result.ball[0].velocity.x(), result.ball[0].velocity.y());
+            detectionBall->set_vel_x(TransferVel.x());
+            detectionBall->set_vel_y(TransferVel.y());
+            detectionBall->set_valid(dealBall.getValid());
+            detectionBall->set_last_touch(lastTouch);
+            detectionBall->set_ball_state(ballStateMachine);
+        } else {
+            detectionBall->set_x(-32767);
+            detectionBall->set_y(-32767);
+        }
+        for (int i = 0; i < result.robotSize[PARAM::BLUE]; i++) {
+            if (i == PARAM::SENDROBOTNUM) break; //for sending MAX 8 car possible
+            detectionRobot[PARAM::BLUE][i] = passEnd->add_robots_blue();
+//            detectionRobot[PARAM::BLUE][i] = detectionFrame.add_robots_blue();
+            detectionRobot[PARAM::BLUE][i]->set_x(result.robot[PARAM::BLUE][i].pos.x());
+            detectionRobot[PARAM::BLUE][i]->set_y(result.robot[PARAM::BLUE][i].pos.y());
+            detectionRobot[PARAM::BLUE][i]->set_orientation(result.robot[PARAM::BLUE][i].angle);
+            detectionRobot[PARAM::BLUE][i]->set_robot_id(result.robot[PARAM::BLUE][i].id);
+            detectionRobot[PARAM::BLUE][i]->set_confidence(1);
+            CVector TransferVel(result.robot[PARAM::BLUE][i].velocity.x(), result.robot[PARAM::BLUE][i].velocity.y());
+            detectionRobot[PARAM::BLUE][i]->set_vel_x(TransferVel.x());
+            detectionRobot[PARAM::BLUE][i]->set_vel_y(TransferVel.y());
+            detectionRobot[PARAM::BLUE][i]->set_rotate_vel(result.robot[PARAM::BLUE][i].rotateVel);
+        }
+        for (int i = 0; i < result.robotSize[PARAM::YELLOW]; i++) {
+            if (i == PARAM::SENDROBOTNUM) break;
+//            detectionRobot[PARAM::YELLOW][i] = detectionFrame.add_robots_yellow();
+            detectionRobot[PARAM::YELLOW][i] = passEnd->add_robots_yellow();
+            detectionRobot[PARAM::YELLOW][i]->set_x(result.robot[PARAM::YELLOW][i].pos.x());
+            detectionRobot[PARAM::YELLOW][i]->set_y(result.robot[PARAM::YELLOW][i].pos.y());
+            detectionRobot[PARAM::YELLOW][i]->set_orientation(result.robot[PARAM::YELLOW][i].angle);
+            detectionRobot[PARAM::YELLOW][i]->set_robot_id(result.robot[PARAM::YELLOW][i].id);
+            detectionRobot[PARAM::YELLOW][i]->set_confidence(1);
+            CVector TransferVel(result.robot[PARAM::YELLOW][i].velocity.x(), result.robot[PARAM::YELLOW][i].velocity.y());
+            detectionRobot[PARAM::YELLOW][i]->set_vel_x(TransferVel.x());
+            detectionRobot[PARAM::YELLOW][i]->set_vel_y(TransferVel.y());
+            detectionRobot[PARAM::YELLOW][i]->set_rotate_vel(result.robot[PARAM::YELLOW][i].rotateVel);
+        }
+//        int size = detectionFrame.ByteSize();
+        int size = passEnd->ByteSize();
+        QByteArray buffer(size, 0);
+//        detectionFrame.SerializeToArray(buffer.data(), buffer.size());
+        passEnd->SerializeToArray(buffer.data(), buffer.size());
+
+        //在这儿发送protubuf包
+        QString endend ="_pass_" + QString::number(passCount) + ".zlog";
+//        lw_v.setFileName(filename.replace(endend, "_end_" + QString::number(passCount) + ".zlog"));
+        lw_v.write(buffer);
+
+        //发送完毕
+
+        passEnd->clear_robots_blue();
+        passEnd->clear_robots_yellow();
+        lastpBallState = "other";
+        return true;
+    } else if (pBallState != "pass") {
+        lastpBallState = "other";
+    }
+    return false;
 }

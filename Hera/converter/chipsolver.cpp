@@ -21,7 +21,7 @@ Chipsolver::Chipsolver(VisionModule* vm)
     : timeOffset(0.05)
     , tFly(9999)
     , vm(vm){
-
+    judgeTool.maintain = vm->maintain;
 }
 Chipsolver::~Chipsolver() {
 
@@ -151,4 +151,19 @@ void Chipsolver::setrecord() {
     }
 
 }
+
+void Chipsolver::resetConfidence(){
+    chipConfidence = 0;
+    flatConfidence = 0;
+}
+void Chipsolver::addChipConfidence(double value){
+    chipConfidence+=value;
+    if (chipConfidence>2) chipConfidence = 2;
+}
+
+void Chipsolver::deChipConfidence(double value){
+    chipConfidence-=value;
+    if (chipConfidence<-1) chipConfidence =-1;
+}
+
 
