@@ -22,6 +22,8 @@ VisionModule::VisionModule(QObject *parent)
     , passCount(0)
     , lastpBallState("other")
     , needNewFile(true)
+    , writebegin(false)
+    , writeend(false)
 {
     passBegin       = package4RL.mutable_beginframe();
     passEnd         = package4RL.mutable_endframe();
@@ -169,21 +171,22 @@ bool VisionModule::toProtobuf(){
             detectionRobot[PARAM::YELLOW][i]->set_rotate_vel(result.robot[PARAM::YELLOW][i].rotateVel);
         }
 //        int size = detectionFrame.ByteSize();
-        int size = passBegin->ByteSize();
-        QByteArray buffer(size, 0);
-//        detectionFrame.SerializeToArray(buffer.data(), buffer.size());
-        passBegin->SerializeToArray(buffer.data(), buffer.size());
+//        int size = passBegin->ByteSize();
+//        QByteArray buffer(size, 0);
+////        detectionFrame.SerializeToArray(buffer.data(), buffer.size());
+//        passBegin->SerializeToArray(buffer.data(), buffer.size());
 
-        //在这儿发送protubuf包
-        QString beginbegin = "_end_"+QString::number(passCount - 1)+".zlog";
-//        lw_v.setFileName(filename.replace(beginbegin, "_pass_" + QString::number(passCount) + ".zlog"));
-        lw_v.write(buffer);
+//        //在这儿发送protubuf包
+//        QString beginbegin = "_end_"+QString::number(passCount - 1)+".zlog";
+////        lw_v.setFileName(filename.replace(beginbegin, "_pass_" + QString::number(passCount) + ".zlog"));
+//        lw_v.write(buffer);
 
-        //发送完毕
+//        //发送完毕
 
-        passBegin->clear_robots_blue();
-        passBegin->clear_robots_yellow();
+//        passBegin->clear_robots_blue();
+//        passBegin->clear_robots_yellow();
         lastpBallState = "pass";
+        writebegin = true;
         return true;
     } else if (lastpBallState == "pass" && pBallState != "pass") {
         needNewFile = true;
@@ -232,24 +235,35 @@ bool VisionModule::toProtobuf(){
             detectionRobot[PARAM::YELLOW][i]->set_rotate_vel(result.robot[PARAM::YELLOW][i].rotateVel);
         }
 //        int size = detectionFrame.ByteSize();
-        int size = passEnd->ByteSize();
-        QByteArray buffer(size, 0);
-//        detectionFrame.SerializeToArray(buffer.data(), buffer.size());
-        passEnd->SerializeToArray(buffer.data(), buffer.size());
+//        int size = passEnd->ByteSize();
+//        QByteArray buffer(size, 0);
+////        detectionFrame.SerializeToArray(buffer.data(), buffer.size());
+//        passEnd->SerializeToArray(buffer.data(), buffer.size());
 
-        //在这儿发送protubuf包
-        QString endend ="_pass_" + QString::number(passCount) + ".zlog";
-//        lw_v.setFileName(filename.replace(endend, "_end_" + QString::number(passCount) + ".zlog"));
-        lw_v.write(buffer);
+//        //在这儿发送protubuf包
+//        QString endend ="_pass_" + QString::number(passCount) + ".zlog";
+////        lw_v.setFileName(filename.replace(endend, "_end_" + QString::number(passCount) + ".zlog"));
+//        lw_v.write(buffer);
 
-        //发送完毕
+//        //发送完毕
 
-        passEnd->clear_robots_blue();
-        passEnd->clear_robots_yellow();
+//        passEnd->clear_robots_blue();
+//        passEnd->clear_robots_yellow();
         lastpBallState = "other";
+        writeend = true;
         return true;
     } else if (pBallState != "pass") {
         lastpBallState = "other";
+    }
+
+    if (writebegin && writeend) {
+        int size = package4RL.ByteSize();
+        QByteArray buffer(size, 0);
+        package4RL.SerializeToArray(buffer.data(), buffer.size());
+        lw_v.write(buffer);
+        package4RL.clear_beginframe();
+        package4RL.clear_endframe();
+        package4RL.clear_reward();
     }
     return false;
 }

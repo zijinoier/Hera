@@ -70,6 +70,8 @@ class VisionModule : public QObject {
     QString pBallState;
     QString lastpBallState;
     bool needNewFile;
+    bool writebegin;
+    bool writeend;
     Ballstate ballState4Log;
 
 
