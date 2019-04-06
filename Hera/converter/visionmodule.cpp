@@ -261,6 +261,7 @@ bool VisionModule::toProtobuf(){
         QByteArray buffer(size, 0);
         package4RL.SerializeToArray(buffer.data(), buffer.size());
         lw_v.write(buffer);
+        package4RL.set_reward(0);
         package4RL.clear_beginframe();
         package4RL.clear_endframe();
         package4RL.clear_reward();
