@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 
 
 //        vm.filename = outFileName.replace(".log.gz", "_end_0.zlog");
-        vm.lw_v.setFileName(outFileName.replace(".log.gz","_pass.zlog"));
+        vm.lw_v.setFileName(outFileName.replace("log.gz","pb"));
         vm.passCount = 0;
 
         int m_currentFrame = 0;
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
             } else {
                 std::cout << "Error unsupported message type found in log file!" << std::endl;
             }
-            std::cout << m_currentFrame + 1 << "/" << size << "\r";
+//            std::cout << m_currentFrame + 1 << "/" << size << "\r";
         }
         std::cout << "\nfinished" << std::endl;
     }

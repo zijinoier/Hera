@@ -25,8 +25,7 @@ VisionModule::VisionModule(QObject *parent)
     , writebegin(false)
     , writeend(false)
 {
-    passBegin       = package4RL.mutable_beginframe();
-    passEnd         = package4RL.mutable_endframe();
+
 //    detectionBall   = detectionFrame.mutable_balls();
     setCameraMatrix();
 }
@@ -124,9 +123,12 @@ bool VisionModule::toProtobuf(){
 //    qDebug() << needNewFile << "the last state is " <<lastpBallState  <<"and the current state is "<<pBallState;
 
     if (pBallState == "pass" && needNewFile) {
+        package4RL = packages4RL.add_package();
         needNewFile = false;
         passCount++;
         ReceiveVisionMessage result = maintain[-500];
+        passBegin       = package4RL->mutable_beginframe();
+
         detectionBall = passBegin->mutable_balls();
         if (result.ballSize > 0) {
             detectionBall->set_x(result.ball[0].pos.x());
@@ -187,10 +189,10 @@ bool VisionModule::toProtobuf(){
 //        passBegin->clear_robots_yellow();
         lastpBallState = "pass";
         writebegin = true;
-        return true;
     } else if (lastpBallState == "pass" && pBallState != "pass") {
         needNewFile = true;
         ReceiveVisionMessage result = maintain[-500];
+        passEnd         = package4RL->mutable_endframe();
         detectionBall = passEnd->mutable_balls();
         if (result.ballSize > 0) {
             detectionBall->set_x(result.ball[0].pos.x());
@@ -251,20 +253,26 @@ bool VisionModule::toProtobuf(){
 //        passEnd->clear_robots_yellow();
         lastpBallState = "other";
         writeend = true;
-        return true;
     } else if (pBallState != "pass") {
         lastpBallState = "other";
+        return false;
     }
 
     if (writebegin && writeend) {
-        int size = package4RL.ByteSize();
+        writebegin = false;
+        writeend = false;
+        package4RL->set_reward(0);
+        qDebug() <<"The begin frame is " <<  package4RL->beginframe().balls().x() << "The end frame is " << package4RL->endframe().balls().x();
+        int size = packages4RL.ByteSize();
         QByteArray buffer(size, 0);
-        package4RL.SerializeToArray(buffer.data(), buffer.size());
+        packages4RL.SerializeToArray(buffer.data(), buffer.size());
+//        qDebug() << buffer;
         lw_v.write(buffer);
-        package4RL.set_reward(0);
-        package4RL.clear_beginframe();
-        package4RL.clear_endframe();
-        package4RL.clear_reward();
+//        package4RL.clear_beginframe();
+//        package4RL.clear_endframe();
+//        package4RL.clear_reward();
+//        packages4RL.clear_package();
+        return true;
     }
     return false;
 }

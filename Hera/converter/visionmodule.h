@@ -59,7 +59,8 @@ class VisionModule : public QObject {
     bool collectNewVision();
     bool dealWithData();
     CGlobalSettings globalsetting;
-    PassPackage4RL package4RL;
+    PassPackages4RL packages4RL;
+    PassPackage4RL* package4RL;
     Vision_DetectionFrame* passBegin;
     Vision_DetectionFrame* passEnd;
     Vision_DetectionBall* detectionBall;

@@ -33,6 +33,7 @@ void protobuf_AssignDesc_passpackage4RL_2eproto();
 void protobuf_ShutdownFile_passpackage4RL_2eproto();
 
 class PassPackage4RL;
+class PassPackages4RL;
 
 // ===================================================================
 
@@ -136,6 +137,88 @@ class PassPackage4RL : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static PassPackage4RL* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class PassPackages4RL : public ::google::protobuf::Message {
+ public:
+  PassPackages4RL();
+  virtual ~PassPackages4RL();
+
+  PassPackages4RL(const PassPackages4RL& from);
+
+  inline PassPackages4RL& operator=(const PassPackages4RL& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PassPackages4RL& default_instance();
+
+  void Swap(PassPackages4RL* other);
+
+  // implements Message ----------------------------------------------
+
+  PassPackages4RL* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const PassPackages4RL& from);
+  void MergeFrom(const PassPackages4RL& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .PassPackage4RL package = 1;
+  inline int package_size() const;
+  inline void clear_package();
+  static const int kPackageFieldNumber = 1;
+  inline const ::PassPackage4RL& package(int index) const;
+  inline ::PassPackage4RL* mutable_package(int index);
+  inline ::PassPackage4RL* add_package();
+  inline const ::google::protobuf::RepeatedPtrField< ::PassPackage4RL >&
+      package() const;
+  inline ::google::protobuf::RepeatedPtrField< ::PassPackage4RL >*
+      mutable_package();
+
+  // @@protoc_insertion_point(class_scope:PassPackages4RL)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::PassPackage4RL > package_;
+  friend void  protobuf_AddDesc_passpackage4RL_2eproto();
+  friend void protobuf_AssignDesc_passpackage4RL_2eproto();
+  friend void protobuf_ShutdownFile_passpackage4RL_2eproto();
+
+  void InitAsDefaultInstance();
+  static PassPackages4RL* default_instance_;
 };
 // ===================================================================
 
@@ -248,6 +331,40 @@ inline void PassPackage4RL::set_reward(float value) {
   set_has_reward();
   reward_ = value;
   // @@protoc_insertion_point(field_set:PassPackage4RL.reward)
+}
+
+// -------------------------------------------------------------------
+
+// PassPackages4RL
+
+// repeated .PassPackage4RL package = 1;
+inline int PassPackages4RL::package_size() const {
+  return package_.size();
+}
+inline void PassPackages4RL::clear_package() {
+  package_.Clear();
+}
+inline const ::PassPackage4RL& PassPackages4RL::package(int index) const {
+  // @@protoc_insertion_point(field_get:PassPackages4RL.package)
+  return package_.Get(index);
+}
+inline ::PassPackage4RL* PassPackages4RL::mutable_package(int index) {
+  // @@protoc_insertion_point(field_mutable:PassPackages4RL.package)
+  return package_.Mutable(index);
+}
+inline ::PassPackage4RL* PassPackages4RL::add_package() {
+  // @@protoc_insertion_point(field_add:PassPackages4RL.package)
+  return package_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::PassPackage4RL >&
+PassPackages4RL::package() const {
+  // @@protoc_insertion_point(field_list:PassPackages4RL.package)
+  return package_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::PassPackage4RL >*
+PassPackages4RL::mutable_package() {
+  // @@protoc_insertion_point(field_mutable_list:PassPackages4RL.package)
+  return &package_;
 }
 
 

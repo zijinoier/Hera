@@ -21,6 +21,9 @@ namespace {
 const ::google::protobuf::Descriptor* PassPackage4RL_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   PassPackage4RL_reflection_ = NULL;
+const ::google::protobuf::Descriptor* PassPackages4RL_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  PassPackages4RL_reflection_ = NULL;
 
 }  // namespace
 
@@ -48,6 +51,21 @@ void protobuf_AssignDesc_passpackage4RL_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(PassPackage4RL));
+  PassPackages4RL_descriptor_ = file->message_type(1);
+  static const int PassPackages4RL_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PassPackages4RL, package_),
+  };
+  PassPackages4RL_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      PassPackages4RL_descriptor_,
+      PassPackages4RL::default_instance_,
+      PassPackages4RL_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PassPackages4RL, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PassPackages4RL, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(PassPackages4RL));
 }
 
 namespace {
@@ -62,6 +80,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     PassPackage4RL_descriptor_, &PassPackage4RL::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    PassPackages4RL_descriptor_, &PassPackages4RL::default_instance());
 }
 
 }  // namespace
@@ -69,6 +89,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void protobuf_ShutdownFile_passpackage4RL_2eproto() {
   delete PassPackage4RL::default_instance_;
   delete PassPackage4RL_reflection_;
+  delete PassPackages4RL::default_instance_;
+  delete PassPackages4RL_reflection_;
 }
 
 void protobuf_AddDesc_passpackage4RL_2eproto() {
@@ -83,11 +105,14 @@ void protobuf_AddDesc_passpackage4RL_2eproto() {
     ".proto\"v\n\016PassPackage4RL\022*\n\nbeginFrame\030\001"
     " \002(\0132\026.Vision_DetectionFrame\022(\n\010endFrame"
     "\030\002 \002(\0132\026.Vision_DetectionFrame\022\016\n\006reward"
-    "\030\003 \002(\002", 166);
+    "\030\003 \002(\002\"3\n\017PassPackages4RL\022 \n\007package\030\001 \003"
+    "(\0132\017.PassPackage4RL", 219);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "passpackage4RL.proto", &protobuf_RegisterTypes);
   PassPackage4RL::default_instance_ = new PassPackage4RL();
+  PassPackages4RL::default_instance_ = new PassPackages4RL();
   PassPackage4RL::default_instance_->InitAsDefaultInstance();
+  PassPackages4RL::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_passpackage4RL_2eproto);
 }
 
@@ -411,6 +436,226 @@ void PassPackage4RL::Swap(PassPackage4RL* other) {
   ::google::protobuf::Metadata metadata;
   metadata.descriptor = PassPackage4RL_descriptor_;
   metadata.reflection = PassPackage4RL_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int PassPackages4RL::kPackageFieldNumber;
+#endif  // !_MSC_VER
+
+PassPackages4RL::PassPackages4RL()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:PassPackages4RL)
+}
+
+void PassPackages4RL::InitAsDefaultInstance() {
+}
+
+PassPackages4RL::PassPackages4RL(const PassPackages4RL& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:PassPackages4RL)
+}
+
+void PassPackages4RL::SharedCtor() {
+  _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+PassPackages4RL::~PassPackages4RL() {
+  // @@protoc_insertion_point(destructor:PassPackages4RL)
+  SharedDtor();
+}
+
+void PassPackages4RL::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void PassPackages4RL::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* PassPackages4RL::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return PassPackages4RL_descriptor_;
+}
+
+const PassPackages4RL& PassPackages4RL::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_passpackage4RL_2eproto();
+  return *default_instance_;
+}
+
+PassPackages4RL* PassPackages4RL::default_instance_ = NULL;
+
+PassPackages4RL* PassPackages4RL::New() const {
+  return new PassPackages4RL;
+}
+
+void PassPackages4RL::Clear() {
+  package_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool PassPackages4RL::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:PassPackages4RL)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .PassPackage4RL package = 1;
+      case 1: {
+        if (tag == 10) {
+         parse_package:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_package()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(10)) goto parse_package;
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:PassPackages4RL)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:PassPackages4RL)
+  return false;
+#undef DO_
+}
+
+void PassPackages4RL::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:PassPackages4RL)
+  // repeated .PassPackage4RL package = 1;
+  for (int i = 0; i < this->package_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->package(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:PassPackages4RL)
+}
+
+::google::protobuf::uint8* PassPackages4RL::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:PassPackages4RL)
+  // repeated .PassPackage4RL package = 1;
+  for (int i = 0; i < this->package_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->package(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:PassPackages4RL)
+  return target;
+}
+
+int PassPackages4RL::ByteSize() const {
+  int total_size = 0;
+
+  // repeated .PassPackage4RL package = 1;
+  total_size += 1 * this->package_size();
+  for (int i = 0; i < this->package_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->package(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void PassPackages4RL::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const PassPackages4RL* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const PassPackages4RL*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void PassPackages4RL::MergeFrom(const PassPackages4RL& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  package_.MergeFrom(from.package_);
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void PassPackages4RL::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void PassPackages4RL::CopyFrom(const PassPackages4RL& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool PassPackages4RL::IsInitialized() const {
+
+  if (!::google::protobuf::internal::AllAreInitialized(this->package())) return false;
+  return true;
+}
+
+void PassPackages4RL::Swap(PassPackages4RL* other) {
+  if (other != this) {
+    package_.Swap(&other->package_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata PassPackages4RL::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = PassPackages4RL_descriptor_;
+  metadata.reflection = PassPackages4RL_reflection_;
   return metadata;
 }
 

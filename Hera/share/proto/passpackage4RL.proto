@@ -7,3 +7,7 @@ message PassPackage4RL{
 	required Vision_DetectionFrame  endFrame   = 2;
 	required float reward                      = 3;
 } 
+
+message PassPackages4RL {
+	repeated PassPackage4RL package = 1;
+}
