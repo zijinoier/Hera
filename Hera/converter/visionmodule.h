@@ -55,11 +55,13 @@ class VisionModule : public QObject {
     int lastTouch;
     double lastPossible, currentPossible;
 
+    PassPackages4RL packages4RL;
+
   private:
     bool collectNewVision();
     bool dealWithData();
     CGlobalSettings globalsetting;
-    PassPackages4RL packages4RL;
+
     PassPackage4RL* package4RL;
     Vision_DetectionFrame* passBegin;
     Vision_DetectionFrame* passEnd;

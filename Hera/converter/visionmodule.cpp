@@ -124,6 +124,7 @@ bool VisionModule::toProtobuf(){
 
     if (pBallState == "pass" && needNewFile) {
         package4RL = packages4RL.add_package();
+        package4RL->set_reward(0);
         needNewFile = false;
         passCount++;
         ReceiveVisionMessage result = maintain[-500];
@@ -261,17 +262,16 @@ bool VisionModule::toProtobuf(){
     if (writebegin && writeend) {
         writebegin = false;
         writeend = false;
-        package4RL->set_reward(0);
-        qDebug() <<"The begin frame is " <<  package4RL->beginframe().balls().x() << "The end frame is " << package4RL->endframe().balls().x();
-        int size = packages4RL.ByteSize();
-        QByteArray buffer(size, 0);
-        packages4RL.SerializeToArray(buffer.data(), buffer.size());
-//        qDebug() << buffer;
-        lw_v.write(buffer);
-//        package4RL.clear_beginframe();
-//        package4RL.clear_endframe();
-//        package4RL.clear_reward();
-//        packages4RL.clear_package();
+//        qDebug() <<"The begin frame is " <<  package4RL->beginframe().balls().x() << "The end frame is " << package4RL->endframe().balls().x();
+//        int size = packages4RL.ByteSize();
+//        QByteArray buffer(size, 0);
+//        packages4RL.SerializeToArray(buffer.data(), buffer.size());
+////        qDebug() << buffer;
+//        lw_v.write(buffer);
+////        package4RL.clear_beginframe();
+////        package4RL.clear_endframe();
+////        package4RL.clear_reward();
+////        packages4RL.clear_package();
         return true;
     }
     return false;

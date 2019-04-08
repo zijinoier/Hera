@@ -95,8 +95,14 @@ int main(int argc, char *argv[])
             } else {
                 std::cout << "Error unsupported message type found in log file!" << std::endl;
             }
-//            std::cout << m_currentFrame + 1 << "/" << size << "\r";
+            std::cout << m_currentFrame + 1 << "/" << size << "\r";
         }
+        int pkgsize = vm.packages4RL.ByteSize();
+        QByteArray buffer(pkgsize, 0);
+        vm.packages4RL.SerializeToArray(buffer.data(), buffer.size());
+//        qDebug() << buffer;
+        vm.lw_v.write(buffer);
+        vm.packages4RL.clear_package();
         std::cout << "\nfinished" << std::endl;
     }
     qDebug() << "All tasks finished, please find results in" << parser.value(outFileDir);
